@@ -9,6 +9,7 @@ import { env } from "./lib/env.js";
 import { createCheckout } from "./services/checkout.js";
 import { reserveInventory } from "./services/inventory.js";
 import { getCustomerProfile } from "./services/users.js";
+import { processRefundTransaction } from "./services/refunds.js";
 
 const flare = init({
   apiKey: env.FLARE_INGEST_API_KEY,
@@ -91,6 +92,7 @@ app.get("/", (c) =>
         "GET /crash/db-pool|payment-timeout|coupon-null|missing-profile|stale-inventory",
       customer: "GET /api/customers/cus_founder?scenario=missing-profile",
       inventory: "GET /api/inventory/pro_monthly?scenario=stale-inventory",
+      processRefund: "POST /api/refunds",
     },
   }),
 );
@@ -146,6 +148,15 @@ app.post("/api/checkout", async (c) => {
   });
 
   return c.json({ data: result });
+});
+
+app.post("/api/refunds", async (c) => {
+  const body = await readJsonBody(c.req.raw);
+  const transactionId = stringValue(body.transactionId, "txn_12345");
+  
+  await processRefundTransaction(transactionId);
+  
+  return c.json({ success: true });
 });
 
 app.get("/crash/:scenario", async (c) => {
