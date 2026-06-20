@@ -88,9 +88,9 @@ app.get("/", (c) =>
       health: "GET /health",
       checkoutSuccess: "GET /api/checkout",
       checkoutWithScenario:
-        "GET /api/checkout?scenario=db-pool|payment-timeout|coupon-null|missing-profile|stale-inventory",
+        "GET /api/checkout?scenario=db-pool|payment-timeout|coupon-null|missing-profile|stale-inventory|fraud-detected",
       shortcutCrash:
-        "GET /crash/db-pool|payment-timeout|coupon-null|missing-profile|stale-inventory",
+        "GET /crash/db-pool|payment-timeout|coupon-null|missing-profile|stale-inventory|fraud-detected",
       customer: "GET /api/customers/cus_founder?scenario=missing-profile",
       inventory: "GET /api/inventory/pro_monthly?scenario=stale-inventory",
       processRefund: "POST /api/refunds",

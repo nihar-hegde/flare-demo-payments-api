@@ -12,6 +12,13 @@ export class PaymentProviderTimeoutError extends Error {
   }
 }
 
+export class FraudDetectionError extends Error {
+  constructor(public readonly customerId: string) {
+    super(`Payment rejected for customer ${customerId} due to high fraud risk`);
+    this.name = "FraudDetectionError";
+  }
+}
+
 export async function createPaymentIntent(input: {
   amountCents: number;
   customerId: string;
@@ -37,6 +44,10 @@ export async function createPaymentIntent(input: {
 
       if (input.scenario === "payment-timeout") {
         throw new PaymentProviderTimeoutError("stripe");
+      }
+
+      if (input.scenario === "fraud-detected") {
+        throw new FraudDetectionError(input.customerId);
       }
 
       const discountPercent =
