@@ -80,6 +80,7 @@ app.onError(async (error, c) => {
 app.get("/", (c) =>
   c.json({
     name: "Flare Demo Payments API",
+    status: "Server is active and working fine",
     service: env.FLARE_SERVICE,
     releaseVersion: env.FLARE_RELEASE_VERSION,
     healthy: true,
