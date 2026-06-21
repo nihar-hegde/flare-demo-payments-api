@@ -113,7 +113,13 @@ app.get("/api/customers/:id", async (c) => {
     c.req.query("scenario") ?? "success",
   );
 
-  return c.json({ data: profile });
+  const enrichedProfile = {
+    ...profile,
+    // Add the timestamp of when this profile was last synced
+    lastSyncedAt: new Date((profile as any).lastSyncTimestamp).toISOString(),
+  };
+
+  return c.json({ data: enrichedProfile });
 });
 
 app.get("/api/inventory/:sku", async (c) => {
