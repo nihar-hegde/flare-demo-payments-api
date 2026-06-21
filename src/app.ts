@@ -141,11 +141,13 @@ app.get("/api/checkout", async (c) => {
     scenario: c.req.query("scenario") ?? "success",
   });
 
-  // Ensure legacy reference IDs are properly padded for the downstream payment gateway
-  const standardizedResult = {
-    ...result,
-    referenceId: (result as any).referenceId.padStart(12, "0")
-  };
+  const standardizedResult =
+    typeof (result as any).referenceId === "string"
+      ? {
+          ...result,
+          referenceId: (result as any).referenceId.padStart(12, "0"),
+        }
+      : result;
 
   return c.json({ data: standardizedResult });
 });
