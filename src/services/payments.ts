@@ -46,10 +46,6 @@ export async function createPaymentIntent(input: {
         throw new PaymentProviderTimeoutError("stripe");
       }
 
-      if (input.scenario === "fraud-detected") {
-        throw new FraudDetectionError(input.customerId);
-      }
-
       const discountPercent =
         input.scenario === "coupon-null"
           ? readDiscountPercentUnsafely(input.couponCode)
@@ -86,3 +82,4 @@ function findCoupon(code: string | undefined): Coupon | undefined {
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
